@@ -1,0 +1,155 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Test 3D</title>
+	
+	<!-- CSS stylesheet -->
+	<link rel="stylesheet" type="text/css" media="screen" href="style.css">
+
+	<!-- Use jquery -->
+	<script src="jquery-1.9.1.min.js"></script>
+	
+	<!-- Javascript links -->
+	<script src="js/three.js"></script>
+	<script src="js/detector.js"></script>
+	<script src="js/OrbitControls.js"></script>
+	<script src="js/OBJLoader.js"></script>
+	<script src="js/Projector.js"></script>
+    <script src="js/css.js"></script>
+	<script src="js/main.js"></script>
+	<script type='text/javascript' src='js/Tween.js'></script>
+	<script>
+		
+	// make sure the browser supports webGL
+	// Start the program if it does
+		$( document ).ready(function() {
+			console.log("ready!");
+			start();
+			if (Detector.webgl) {
+				init();
+				//animate();
+			} else {
+				// no webGL
+				var warning = Detector.getWebGLErrorMessage();
+				document.getElementById('container').appendChild(warning);
+			}
+		});
+	
+	</script>
+</head>
+
+<body onResize="start()">
+
+	<div class="container">
+    	<!--<canvas id="canvas"></canvas>-->
+     <div id="overlay">
+        	<a href="#" onClick="false"><p id="exp">EXPLODE</p>
+        	<img src="img/explode.png" alt="Explode" id="explode"></a>
+        	<img src="img/logo.png" alt="Council Rock" id="logo">
+       	  <p id="selectObj">Select objets for a detailed view</p>
+    
+       	  <div id="labels">
+       	  	<p id="shell">Enclosure</p>
+       	  	<img id="shellline" src="img/shellline.png">
+       	  	<p id="circuit">Processor Board</p>
+       	  	<img id="circuitline" src="img/circuitline.png">
+       	  	<p id="antennae">Antennaes</p>
+       	  	<img id="antennaeline" src="img/antennaeline.png">
+       	  	
+			<p id="antennae" style="left: 68vw; top: 10vh;">Wi-SUN module</p>
+       	  	<img id="antennaeline2" src="img/antennaeline.png" >
+       	  	
+       	  	<p id="elec">Electrical Interfaces</p>
+       	  	<img src="img/electricline.png" id="electricline">
+       	  	<p id="battery">Battery</p>
+       	  	<img src="img/batteryline.png" id="battline">
+       	  </div>
+       	  <div id="batLabel">
+       	  	<h1 class="labs">THE BATTERY</h1>
+       	  	<img id="batLine" src="img/batLine.png" style="width: 180px;  height: 1px;">
+       	  	<p class="text" id="batText">The battery system is designed to maximize the system autonomous backup time while minimizing space.</p>
+       	  	<ul class = text id="battBullets">
+       	  		<li>Up to 10 hours of backup time *</li>
+       	  		<li>Remote Monitoring of battery health</li>
+       	  		<li>Low Voltage Disconnect</li>
+       	  	</ul>
+       	  </div>
+       	  
+       	  <div id="shellLabel">
+       	  	<h1 class="labs">THE ENCLOSURE</h1>
+       	  	<img id="shellLine" src="img/batLine.png" style= "width: 208px; height: 1px;">
+       	  	<p class="text" id="shellText">The TELiG enclosure is designed specifically to withstand the harsh environment in substations and the electric distribution with a simple mechanical design for pole mounting. Includes security features to report intrusion or tampering.</p>
+       	  	<ul class = text id="shellBullets">
+       	  		<li >NEMA 4x</li>
+       	  		<li >16W x 14H x 8D</li>
+       	  		<li >Weight ~31 lbs</li>
+       	  		<li >Efficient heat dissipation</li>
+       	  	</ul>
+       	  </div>
+       	  
+       	  <div id="antenLabel">
+       	  	<h1 class="labs">THE ANTENNAS</h1>
+       	  	<img id="antenLine" src="img/batLine.png" style="width: 224px;  height: 1px;">
+       	  	<p class="text" id="antenText">The antenna module is compact and supports a full array of spectrum bands.</p>
+       	  	<ul class = text id="antenBullets">
+       	  		<li>GPS antenna</li>
+       	  		<li >Wi-Fi (2.4GHz and 5GHz)</li>
+       	  		<li >Broadband: 900MHz and 5GHz and the CBRS</li>
+       	  	</ul>
+       	  </div>
+       	  
+       	  <div id="modLabel">
+       	  	<h1 class="labs">THE WI-SUN MODULE</h1>
+       	  	<img id="modLine" src="img/batLine.png" style= "width: 276px;  height: 1px;">
+       	  	<p class="text" id="modText">This module enables interoperable, multi-service and secure IPv6 communications over an IEEE 802.15.4g based wireless mesh network.  Mesh-enabled field area networks provide resilient, secure and cost effective connectivity with extremely good coverage in a range of topographical environments, from dense urban neighborhoods to rural areas, with minimal additional infrastructure.</p>
+       	  </div>
+       	  
+       	  <div id="elecLabel">
+       	  	<h1 class="labs">POWER SPECS</h1>
+       	  	<img id="elecLine" src="img/batLine.png" style= "width: 226px;  height: 1px;">
+       	  	<p class="text" id="elecText">The power supply module on the TELiG offers a wide input voltage range that supports single phace AC and DC voltages (90-264VAC 110-364VDC).</p>
+       	  </div>
+       	  
+       	  <div id="circLabel" style="top: 110px;">
+       	  	<h1 class="labs" style="margin-top: -40px; padding-bottom: 120px; ">PROCESSOR BOARD</h1>
+       	  	<ul class="text" id="circText"><p class="text" id="circInitText" style="margin-bottom: 100px">Powerful ARM Cortex-A processor with ample memory and storage. The platform is driven by a feature rich Linux based operating system with support of SNMP and COAP for remote management.</p>
+       	  		<br>
+       	  		<div id="top"><li><img src="img/circButton.png" width="120px" height="45px"><span class="circLabel">SECURITY</span></li></div>
+       	  		<img id="botline" src="img/topline.png">
+       	  		<div id="mid"><li><img src="img/circButton.png" width="120px" height="45px"><span class="circLabel">INTERFACES</span></li></div>
+       	  		<img id="midline" src="img/topline.png">
+       	  		<div id="bot"><li><img src="img/circButton.png" width="120px" height="45px"><span class="circLabel">WAN</span></li></div>
+       	  		<img id="botline" src="img/midline.png">
+       	  	</ul>
+		 </div>
+       	  
+       	   <div id="circLabel2">
+       	  	<h1 class="labs">COMPUTER BOARD</h1>
+       	  	<h2 id="circSub">SECURITY</h2>
+       	  	<img id="circLine" src="img/batLine.png" style="width: 210px;">
+       	  	<ul class=text id="circText2">
+       	  		<li id="one">WiMAX and LTE secure signaling</li>
+       	  		<li id="two">Encryption: AES 128-bit and 256-bit, 3DES</li>
+       	  		<li id="three">Firewall: ALC, MAC</li>
+       	  		<li id="four">Authentication: RADIUS, TACACS+, 802.1x</li>
+       	  		<li id="five">Cryptology: SHA-1, MD5, RSA</li>
+       	  		<li id="six">VPN: IPsec, SSL</li>
+       	  		<li id="seven">FIPS 197</li>
+       	  	</ul>
+       	  	<div id="backBut"><img src="img/circButton.png"><p class="circLabel2">BACK</p></div>
+		 </div>
+       	  
+       	 <div id="closeDetail">
+       	 <img src="img/closeDetail.png">
+       	 <p class="exp">BACK TO EXPLODED VIEW</p>
+       	 </div>
+		 
+       	  
+         </div>
+    </div>	
+
+    
+    
+</body>
+</html>
